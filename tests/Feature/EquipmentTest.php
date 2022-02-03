@@ -8,29 +8,45 @@ use Tests\TestCase;
 
 class EquipmentTest extends TestCase
 {
-    public function test_equipment_creation()
+    public function test_equipment_creation(): int
     {
-        $response = $this->post('/equipment',[
-            'name' => 'Test equipment',
+        $response = $this->put('/api/equipment',[
+            'name' => 'Test of equipment',
             'description' => 'Testing equipment',
             'notes' => 'This is a note'
         ]);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);
+        $findId = json_decode($response->getContent());
+        return $findId->id;
     }
 
     public function test_get_all_equipment()
     {
-        $response = $this->get('/equipment');
+        $response = $this->get('/api/equipment');
 
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'success','rs' => []]);
+        $response->assertJson(['status' => 'success','equipment' => []]);
     }
 
-    public function test_equipment_update()
+    /**
+     * @depends test_equipment_creation
+     */
+    public function test_get_equipment(int $id)
     {
-        $response = $this->put('/equipment/1',[
+        $response = $this->get('/api/equipment/'.$id);
+
+        $response->assertStatus(200);
+        $response->assertJson(['status' => 'success','equipment' => []]);
+    }
+
+    /**
+     * @depends test_equipment_creation
+     */
+    public function test_equipment_update(int $id)
+    {
+        $response = $this->patch('/api/equipment/'.$id,[
             'name' => 'Test update equipment',
             'notes' => 'This is an updated note'
         ]);
@@ -39,9 +55,12 @@ class EquipmentTest extends TestCase
         $response->assertJson(['status' => 'success']);
     }
 
-    public function test_equipment_delete()
+    /**
+     * @depends test_equipment_creation
+     */
+    public function test_equipment_delete(int $id)
     {
-        $response = $this->delete('/equipment');
+        $response = $this->delete('/api/equipment/'.$id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);
