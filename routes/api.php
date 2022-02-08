@@ -38,3 +38,10 @@ Route::get('/equipment/{id}',[\App\Http\Controllers\EquipmentController::class,'
 Route::put('/equipment',[\App\Http\Controllers\EquipmentController::class,'createEquipment']);
 Route::patch('/equipment/{id}',[\App\Http\Controllers\EquipmentController::class,'updateEquipment']);
 Route::delete('/equipment/{id}',[\App\Http\Controllers\EquipmentController::class,'deleteEquipment']);
+
+//Exercise related routes
+Route::get('/exercise',[\App\Http\Controllers\ExerciseController::class,'getAllExercises']);
+Route::get('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'getExercise']);
+Route::put('/exercise',[\App\Http\Controllers\ExerciseController::class,'createExercise']);
+Route::patch('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'updateExercise']);
+Route::delete('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'deleteExercise']);
