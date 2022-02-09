@@ -45,3 +45,10 @@ Route::get('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'ge
 Route::put('/exercise',[\App\Http\Controllers\ExerciseController::class,'createExercise']);
 Route::patch('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'updateExercise']);
 Route::delete('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'deleteExercise']);
+
+//Exercise related routes
+Route::get('/workout',[\App\Http\Controllers\WorkoutController::class,'getAllWorkouts']);
+Route::get('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'getWorkout']);
+Route::put('/workout',[\App\Http\Controllers\WorkoutController::class,'createWorkout']);
+Route::patch('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'updateWorkout']);
+Route::delete('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'deleteWorkout']);
