@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Exercise extends Model
 {
     use HasFactory;
+
+    public function workouts(){
+        return $this->belongsToMany(Workout::class)->using(WorkoutExercise::class);
+    }
 }

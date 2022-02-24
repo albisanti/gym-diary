@@ -18,5 +18,15 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@test.com',
             'password' => \Hash::make('test123')
         ]);
+        \DB::table('workouts')->insert([
+            'name' => 'Test day1',
+            'description' => 'testing a workout',
+            'created_by' => 1
+        ]);
+        \DB::table('exercises')->insert([
+            'name' => 'Curl',
+            'description' => 'Big muscles',
+            'notes' => 'Do this for big muscles!'
+        ]);
     }
 }

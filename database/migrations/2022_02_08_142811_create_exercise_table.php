@@ -20,7 +20,7 @@ class CreateExerciseTable extends Migration
             $table->foreignId('equipment_id')->nullable()->constrained('equipments');
             $table->string('name');
             $table->string('description');
-            $table->string('notes');
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }

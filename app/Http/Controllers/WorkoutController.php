@@ -11,7 +11,7 @@ class WorkoutController extends Controller
     public function getWorkout(\Illuminate\Http\Request $request): JsonResponse {
         $workout = Workout::find($request->id);
         if($workout) return response()->json(['status' => 'success', 'workout' => $workout]);
-        return response()->json(['status' => 'error', 'report' => 'Non è stata trovata nessun attrezzo']);
+        return response()->json(['status' => 'error', 'report' => 'Non è stata trovato alcun workout']);
     }
 
     public function getAllWorkouts(){
@@ -37,7 +37,7 @@ class WorkoutController extends Controller
         $workout->created_by = $request->created_by;
         $workout->notes = $request->notes;
         if($workout->save()) return response()->json(['status' => 'success','id' => $workout->id]);
-        return response()->json(['status' => 'error', 'report' => 'Non è stato possibile inserire l\'attrezzo']);
+        return response()->json(['status' => 'error', 'report' => 'Non è stato possibile inserire il workout']);
     }
 
     public function updateWorkout(\Illuminate\Http\Request $request): JsonResponse {
@@ -52,7 +52,7 @@ class WorkoutController extends Controller
             if($workout->save()) return response()->json(['status' => 'success']);
             return response()->json(['status' => 'error', 'report' => 'Non è stato possibile modificare l\'attrezzo']);
         }
-        return response()->json(['status' => 'error', 'report' => 'L\'attrezzo ricercata non è stata trovata']);
+        return response()->json(['status' => 'error', 'report' => 'Il workout ricercata non è stata trovata']);
     }
 
     public function deleteWorkout(\Illuminate\Http\Request $request): JsonResponse {
@@ -60,6 +60,6 @@ class WorkoutController extends Controller
         if($workout) {
             if ($workout->delete()) return response()->json(['status' => 'success']);
         }
-        return response()->json(['status' => 'error', 'report' => 'Non è stato possibile cancellare l\'attrezzo']);
+        return response()->json(['status' => 'error', 'report' => 'Non è stato possibile cancellare il workout']);
     }
 }
