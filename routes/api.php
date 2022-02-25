@@ -53,7 +53,14 @@ Route::put('/workout',[\App\Http\Controllers\WorkoutController::class,'createWor
 Route::patch('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'updateWorkout'])->whereNumber('id');
 Route::delete('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'deleteWorkout'])->whereNumber('id');
 
+//Workouts' exercises related routes
 Route::get('/workout/exercises/{id}',[\App\Http\Controllers\WorkoutExerciseController::class,'GetWorkoutsExercises'])->whereNumber('id');
 Route::put('/workout/exercises/',[\App\Http\Controllers\WorkoutExerciseController::class,'AddNewExercise']);
 Route::patch('/workout/exercises/',[\App\Http\Controllers\WorkoutExerciseController::class,'UpdateWorkoutsExercises']);
 Route::delete('/workout/exercises/',[\App\Http\Controllers\WorkoutExerciseController::class,'DeleteWorkoutsExercises']);
+
+//Feedback releted routes
+Route::get('/feedback/{workoutId}',[\App\Http\Controllers\FeedbackController::class,'GetFeedbackFromWorkoutId'])->whereNumber('workoutId');
+Route::put('/feedback',[\App\Http\Controllers\FeedbackController::class,'AddNewFeedback']);
+Route::patch('/feedback/{id}',[\App\Http\Controllers\FeedbackController::class,'UpdateFeedback']);
+Route::delete('/feedback/{id}',[\App\Http\Controllers\FeedbackController::class,'RemoveFeedback']);

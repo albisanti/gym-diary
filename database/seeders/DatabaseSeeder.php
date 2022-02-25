@@ -28,5 +28,16 @@ class DatabaseSeeder extends Seeder
             'description' => 'Big muscles',
             'notes' => 'Do this for big muscles!'
         ]);
+        \DB::table('exercises')->insert([
+            'name' => 'Leg',
+            'description' => 'Big muscles',
+            'notes' => 'Do this for big leg muscles!'
+        ]);
+        \DB::table('workout_exercise')->insert([
+            'workout_id' => 1,
+            'exercise_id' => 2,
+            'series' => 5,
+            'repetitions' => 5
+        ]);
     }
 }
