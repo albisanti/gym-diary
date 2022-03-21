@@ -21,7 +21,7 @@ class CreateWorkoutsTable extends Migration
             $table->string('notes')->nullable();
             $table->date('start_at')->nullable();
             $table->date('end_at')->nullable();
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

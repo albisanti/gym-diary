@@ -3,33 +3,35 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Workout;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Nette\Utils\DateTime;
 use Tests\TestCase;
 
 class WorkoutTest extends TestCase
 {
-    public function test_workout_creation(): int
+    use RefreshDatabase;
+    public function test_workout_creation(): void
     {
+        Sanctum::actingAs(User::factory()->create());
+        $userAssigner = User::factory()->create();
         $response = $this->put('/api/workout',[
             'name' => 'Test of workout',
             'description' => 'Testing workout',
             'type' => 'TestType',
             'notes' => 'This is a note',
             'start_at' => date('Y-m-d'),
-            'end_at' => null,
-            'created_by' => 1,
+            'end_at' => null
         ]);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);
-        $findId = json_decode($response->getContent());
-        return $findId->id;
     }
 
-    public function test_get_all_workout()
+    public function test_get_all_workout(): void
     {
         $response = $this->get('/api/workout');
 
@@ -37,23 +39,27 @@ class WorkoutTest extends TestCase
         $response->assertJson(['status' => 'success','workout' => []]);
     }
 
-    /**
-     * @depends test_workout_creation
-     */
-    public function test_get_workout(int $id)
+    public function test_get_workout(): void
     {
-        $response = $this->get('/api/workout/'.$id);
+        $user = User::factory()->create();
+        $userAssigner = User::factory()->create();
+        $workout = Workout::factory()->create([
+            'user_id' => $user->id
+        ]);
+        $response = $this->get('/api/workout/'.$workout->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success','workout' => []]);
     }
 
-    /**
-     * @depends test_workout_creation
-     */
-    public function test_workout_update(int $id)
+    public function test_workout_update(): void
     {
-        $response = $this->patch('/api/workout/'.$id,[
+        $user = User::factory()->create();
+        $userAssigner = User::factory()->create();
+        $workout = Workout::factory()->create([
+            'user_id' => $user->id
+        ]);
+        $response = $this->patch('/api/workout/'.$workout->id,[
             'name' => 'Test update workout',
             'notes' => 'This is an updated note',
             'end_at' => Carbon::now()->addDays(31)
@@ -63,12 +69,14 @@ class WorkoutTest extends TestCase
         $response->assertJson(['status' => 'success']);
     }
 
-    /**
-     * @depends test_workout_creation
-     */
-    public function test_workout_delete(int $id)
+    public function test_workout_delete(): void
     {
-        $response = $this->delete('/api/workout/'.$id);
+        $user = User::factory()->create();
+        $userAssigner = User::factory()->create();
+        $workout = Workout::factory()->create([
+            'user_id' => $user->id
+        ]);
+        $response = $this->delete('/api/workout/'.$workout->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);

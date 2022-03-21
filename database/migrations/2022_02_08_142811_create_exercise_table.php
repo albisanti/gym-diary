@@ -15,6 +15,7 @@ class CreateExerciseTable extends Migration
     {
         Schema::create('exercises', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('category_id')->nullable()->constrained();
             $table->foreignId('macro_id')->nullable()->constrained();
             $table->foreignId('equipment_id')->nullable()->constrained('equipments');

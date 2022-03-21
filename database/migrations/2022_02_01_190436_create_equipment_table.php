@@ -15,9 +15,10 @@ class CreateEquipmentTable extends Migration
     {
         Schema::create('equipments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->string('name');
-            $table->string('description');
-            $table->string('notes');
+            $table->string('description')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }
