@@ -12,4 +12,8 @@ class Exercise extends Model
     public function workouts(){
         return $this->belongsToMany(Workout::class)->using(WorkoutExercise::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

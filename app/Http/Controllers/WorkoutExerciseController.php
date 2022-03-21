@@ -15,7 +15,7 @@ class WorkoutExerciseController extends Controller
             'repetitions' => 'integer|nullable',
             'weight' => 'numeric|nullable'
         ]);
-        $workout = Workout::find($request->exercise_id);
+        $workout = Workout::find($request->workout_id);
         if($workout){
             $workout->exercises()->attach($request->exercise_id,[
                 'series' => $request->series,

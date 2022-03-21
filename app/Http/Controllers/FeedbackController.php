@@ -45,7 +45,7 @@ class FeedbackController extends Controller
     public function GetFeedbackFromWorkoutId(\Illuminate\Http\Request $request){
         $workout = Workout::find($request->workoutId);
         if($workout){
-            $feedback = $workout->feedback()->select('created_at')->groupBy('created_at')->get();
+            $feedback = $workout->feedback()->get();
             if($feedback){
                 return response()->json(['status' => 'success','feedback' => $feedback]);
             }
