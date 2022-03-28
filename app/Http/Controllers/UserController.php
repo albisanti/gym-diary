@@ -51,7 +51,7 @@ class UserController extends Controller
     }
 
     public function ResendVerificationNotification(Request $request){
-        $request->user()->sendEmailVerificationNotification();
+        event(new Registered($request->user()));
     }
 
     public function SendPasswordReset(Request $request){
@@ -68,7 +68,7 @@ class UserController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:8',
         ]);
 
         $status = Password::reset(
@@ -83,7 +83,6 @@ class UserController extends Controller
                 event(new PasswordReset($user));
             }
         );
-
-        return $status === Password::PASSWORD_RESET;
+        return $status === Password::PASSWORD_RESET ? response()->json() : response()->json(['report' => 'Non è stato possibile resettare la password'],500);
     }
 }
