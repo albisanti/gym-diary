@@ -2,6 +2,14 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MacroController;
+use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\WorkoutController;
+use App\Http\Controllers\WorkoutExerciseController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,48 +27,55 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //Category related routes
-Route::get('/category',[\App\Http\Controllers\CategoryController::class,'getAllCategories']);
-Route::get('/category/{id}',[\App\Http\Controllers\CategoryController::class,'getCategory'])->whereNumber('id');
-Route::put('/category',[\App\Http\Controllers\CategoryController::class,'createCategory']);
-Route::patch('/category/{id}',[\App\Http\Controllers\CategoryController::class,'updateCategory'])->whereNumber('id');
-Route::delete('/category/{id}',[\App\Http\Controllers\CategoryController::class,'deleteCategory'])->whereNumber('id');
+Route::get('/category',[CategoryController::class,'getAllCategories']);
+Route::get('/category/{id}',[CategoryController::class,'getCategory'])->whereNumber('id');
+Route::put('/category',[CategoryController::class,'createCategory']);
+Route::patch('/category/{id}',[CategoryController::class,'updateCategory'])->whereNumber('id');
+Route::delete('/category/{id}',[CategoryController::class,'deleteCategory'])->whereNumber('id');
 
 //Macro related routes
-Route::get('/macro',[\App\Http\Controllers\MacroController::class,'getAllMacros']);
-Route::get('/macro/{id}',[\App\Http\Controllers\MacroController::class,'getMacro'])->whereNumber('id');
-Route::put('/macro',[\App\Http\Controllers\MacroController::class,'createMacro']);
-Route::patch('/macro/{id}',[\App\Http\Controllers\MacroController::class,'updateMacro'])->whereNumber('id');
-Route::delete('/macro/{id}',[\App\Http\Controllers\MacroController::class,'deleteMacro'])->whereNumber('id');
+Route::get('/macro',[MacroController::class,'getAllMacros']);
+Route::get('/macro/{id}',[MacroController::class,'getMacro'])->whereNumber('id');
+Route::put('/macro',[MacroController::class,'createMacro']);
+Route::patch('/macro/{id}',[MacroController::class,'updateMacro'])->whereNumber('id');
+Route::delete('/macro/{id}',[MacroController::class,'deleteMacro'])->whereNumber('id');
 
 //Equipment related routes
-Route::get('/equipment',[\App\Http\Controllers\EquipmentController::class,'getAllEquipments']);
-Route::get('/equipment/{id}',[\App\Http\Controllers\EquipmentController::class,'getEquipment'])->whereNumber('id');
-Route::put('/equipment',[\App\Http\Controllers\EquipmentController::class,'createEquipment']);
-Route::patch('/equipment/{id}',[\App\Http\Controllers\EquipmentController::class,'updateEquipment'])->whereNumber('id');
-Route::delete('/equipment/{id}',[\App\Http\Controllers\EquipmentController::class,'deleteEquipment'])->whereNumber('id');
+Route::get('/equipment',[EquipmentController::class,'getAllEquipments']);
+Route::get('/equipment/{id}',[EquipmentController::class,'getEquipment'])->whereNumber('id');
+Route::put('/equipment',[EquipmentController::class,'createEquipment']);
+Route::patch('/equipment/{id}',[EquipmentController::class,'updateEquipment'])->whereNumber('id');
+Route::delete('/equipment/{id}',[EquipmentController::class,'deleteEquipment'])->whereNumber('id');
 
 //Exercise related routes
-Route::get('/exercise',[\App\Http\Controllers\ExerciseController::class,'getAllExercises']);
-Route::get('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'getExercise'])->whereNumber('id');
-Route::put('/exercise',[\App\Http\Controllers\ExerciseController::class,'createExercise']);
-Route::patch('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'updateExercise'])->whereNumber('id');
-Route::delete('/exercise/{id}',[\App\Http\Controllers\ExerciseController::class,'deleteExercise'])->whereNumber('id');
+Route::get('/exercise',[ExerciseController::class,'getAllExercises']);
+Route::get('/exercise/{id}',[ExerciseController::class,'getExercise'])->whereNumber('id');
+Route::put('/exercise',[ExerciseController::class,'createExercise']);
+Route::patch('/exercise/{id}',[ExerciseController::class,'updateExercise'])->whereNumber('id');
+Route::delete('/exercise/{id}',[ExerciseController::class,'deleteExercise'])->whereNumber('id');
 
 //Exercise related routes
-Route::get('/workout',[\App\Http\Controllers\WorkoutController::class,'getAllWorkouts']);
-Route::get('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'getWorkout'])->whereNumber('id');
-Route::put('/workout',[\App\Http\Controllers\WorkoutController::class,'createWorkout']);
-Route::patch('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'updateWorkout'])->whereNumber('id');
-Route::delete('/workout/{id}',[\App\Http\Controllers\WorkoutController::class,'deleteWorkout'])->whereNumber('id');
+Route::get('/workout',[WorkoutController::class,'getAllWorkouts']);
+Route::get('/workout/{id}',[WorkoutController::class,'getWorkout'])->whereNumber('id');
+Route::put('/workout',[WorkoutController::class,'createWorkout']);
+Route::patch('/workout/{id}',[WorkoutController::class,'updateWorkout'])->whereNumber('id');
+Route::delete('/workout/{id}',[WorkoutController::class,'deleteWorkout'])->whereNumber('id');
 
 //Workouts' exercises related routes
-Route::get('/workout/exercises/{id}',[\App\Http\Controllers\WorkoutExerciseController::class,'GetWorkoutsExercises'])->whereNumber('id');
-Route::put('/workout/exercises/',[\App\Http\Controllers\WorkoutExerciseController::class,'AddNewExercise']);
-Route::patch('/workout/exercises/',[\App\Http\Controllers\WorkoutExerciseController::class,'UpdateWorkoutsExercises']);
-Route::delete('/workout/exercises/',[\App\Http\Controllers\WorkoutExerciseController::class,'DeleteWorkoutsExercises']);
+Route::get('/workout/exercises/{id}',[WorkoutExerciseController::class,'GetWorkoutsExercises'])->whereNumber('id');
+Route::put('/workout/exercises/',[WorkoutExerciseController::class,'AddNewExercise']);
+Route::patch('/workout/exercises/',[WorkoutExerciseController::class,'UpdateWorkoutsExercises']);
+Route::delete('/workout/exercises/',[WorkoutExerciseController::class,'DeleteWorkoutsExercises']);
 
 //Feedback releted routes
-Route::get('/feedback/{workoutId}',[\App\Http\Controllers\FeedbackController::class,'GetFeedbackFromWorkoutId'])->whereNumber('workoutId');
-Route::put('/feedback',[\App\Http\Controllers\FeedbackController::class,'AddNewFeedback']);
-Route::patch('/feedback/{id}',[\App\Http\Controllers\FeedbackController::class,'UpdateFeedback']);
-Route::delete('/feedback/{id}',[\App\Http\Controllers\FeedbackController::class,'RemoveFeedback']);
+Route::get('/feedback/{workoutId}',[FeedbackController::class,'GetFeedbackFromWorkoutId'])->whereNumber('workoutId');
+Route::put('/feedback',[FeedbackController::class,'AddNewFeedback']);
+Route::patch('/feedback/{id}',[FeedbackController::class,'UpdateFeedback']);
+Route::delete('/feedback/{id}',[FeedbackController::class,'RemoveFeedback']);
+
+Route::get('/email/verify/{id}/{hash}',[UserController::class,'VerifyEmail'])->middleware(['auth:sanctum','signed:sanctum'])->name('verification.verify');
+Route::post('/email/verification-notification',[UserController::class,'ResendVerificationNotification'])->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
+Route::post('/forgot-password',[UserController::class,'SendPasswordReset'])->middleware('guest')->name('password.email');
+Route::post('/reset-password',[UserController::class,'UpdatePassword'])->middleware('guest')->name('password.update');
+Route::post('/register',[UserController::class,'Register']);
+Route::post('/login',[UserController::class,'Login']);
