@@ -9,7 +9,7 @@ class Feedback extends Model
 {
     use HasFactory;
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function workout(){
+        return $this->belongsTo(Workout::class);
     }
 }

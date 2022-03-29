@@ -22,6 +22,7 @@ class CreateWorkoutsTable extends Migration
             $table->date('start_at')->nullable();
             $table->date('end_at')->nullable();
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('assigned_to')->constrained('users');
             $table->timestamps();
         });
     }

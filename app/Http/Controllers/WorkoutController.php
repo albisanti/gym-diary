@@ -32,6 +32,7 @@ class WorkoutController extends Controller
         $workout->name = $request->name;
         $workout->description = $request->description;
         $workout->type = $request->type;
+        $workout->assigned_to = $request->assigned_to;
         $workout->start_at = $request->start_at;
         $workout->end_at = $request->end_at;
         $workout->user_id = Auth::id();

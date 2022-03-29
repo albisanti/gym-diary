@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Exercise;
 use App\Models\User;
 use App\Models\Workout;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -30,7 +31,7 @@ class WorkoutPolicy
      */
     public function view(User $user, Workout $workout)
     {
-        return $user->id === $workout->user_id;
+        return $user->id === $workout->user_id || $user->id === $workout->assigned_to;
     }
 
     /**
@@ -90,5 +91,17 @@ class WorkoutPolicy
     public function forceDelete(User $user, Workout $workout)
     {
         //
+    }
+
+    /**
+     * Determine whether the user can add an exercise to a workout.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Workout  $workout
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function addExercise(User $user, Workout $workout, Exercise $exercise)
+    {
+        return $user->id === $workout->user_id;
     }
 }
