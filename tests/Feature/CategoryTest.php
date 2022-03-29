@@ -27,7 +27,7 @@ class CategoryTest extends TestCase
 
     public function test_get_all_category(): void
     {
-        $user = User::factory()->create();
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->get('/api/category');
 
         $response->assertStatus(200);
@@ -37,6 +37,7 @@ class CategoryTest extends TestCase
     public function test_get_category(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $category = Category::factory()->create(['user_id' => $user->id]);
         $response = $this->get('/api/category/'.$category->id);
 
@@ -47,6 +48,7 @@ class CategoryTest extends TestCase
     public function test_category_update(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $category = Category::factory()->create(['user_id' => $user->id]);
         $response = $this->patch('/api/category/'.$category->id,[
             'name' => 'Test update category',
@@ -60,6 +62,7 @@ class CategoryTest extends TestCase
     public function test_category_delete(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $category = Category::factory()->create(['user_id' => $user->id]);
         $response = $this->delete('/api/category/'.$category->id);
 
