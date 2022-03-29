@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Equipment;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class EquipmentController extends Controller
 {
@@ -27,6 +28,7 @@ class EquipmentController extends Controller
         $equipment->name = $request->name;
         $equipment->description = $request->description;
         $equipment->notes = $request->notes;
+        $equipment->user_id = Auth::id();
         if($equipment->save()) return response()->json(['status' => 'success','id' => $equipment->id]);
         return response()->json(['status' => 'error', 'report' => 'Non è stato possibile inserire l\'attrezzo']);
     }

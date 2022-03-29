@@ -2,14 +2,19 @@
 
 namespace Tests\Feature;
 
+use App\Models\Equipment;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class EquipmentTest extends TestCase
 {
-    public function test_equipment_creation(): int
+    use RefreshDatabase;
+    public function test_equipment_creation(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->put('/api/equipment',[
             'name' => 'Test of equipment',
             'description' => 'Testing equipment',
@@ -18,11 +23,9 @@ class EquipmentTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);
-        $findId = json_decode($response->getContent());
-        return $findId->id;
     }
 
-    public function test_get_all_equipment()
+    public function test_get_all_equipment(): void
     {
         $response = $this->get('/api/equipment');
 
@@ -30,23 +33,21 @@ class EquipmentTest extends TestCase
         $response->assertJson(['status' => 'success','equipment' => []]);
     }
 
-    /**
-     * @depends test_equipment_creation
-     */
-    public function test_get_equipment(int $id)
+    public function test_get_equipment(): void
     {
-        $response = $this->get('/api/equipment/'.$id);
+        $user = User::factory()->create();
+        $equipment = Equipment::factory()->create(['user_id' => $user->id]);
+        $response = $this->get('/api/equipment/'.$equipment->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success','equipment' => []]);
     }
 
-    /**
-     * @depends test_equipment_creation
-     */
-    public function test_equipment_update(int $id)
+    public function test_equipment_update(): void
     {
-        $response = $this->patch('/api/equipment/'.$id,[
+        $user = User::factory()->create();
+        $equipment = Equipment::factory()->create(['user_id' => $user->id]);
+        $response = $this->patch('/api/equipment/'.$equipment->id,[
             'name' => 'Test update equipment',
             'notes' => 'This is an updated note'
         ]);
@@ -55,12 +56,11 @@ class EquipmentTest extends TestCase
         $response->assertJson(['status' => 'success']);
     }
 
-    /**
-     * @depends test_equipment_creation
-     */
-    public function test_equipment_delete(int $id)
+    public function test_equipment_delete(): void
     {
-        $response = $this->delete('/api/equipment/'.$id);
+        $user = User::factory()->create();
+        $equipment = Equipment::factory()->create(['user_id' => $user->id]);
+        $response = $this->delete('/api/equipment/'.$equipment->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);

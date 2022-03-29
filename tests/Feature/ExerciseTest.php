@@ -2,14 +2,19 @@
 
 namespace Tests\Feature;
 
+use App\Models\Exercise;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ExerciseTest extends TestCase
 {
-    public function test_exercise_creation(): int
+    use RefreshDatabase;
+    public function test_exercise_creation(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->put('/api/exercise',[
             'name' => 'Test of exercise',
             'description' => 'Testing exercise',
@@ -18,11 +23,9 @@ class ExerciseTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);
-        $findId = json_decode($response->getContent());
-        return $findId->id;
     }
 
-    public function test_get_all_exercise()
+    public function test_get_all_exercise(): void
     {
         $response = $this->get('/api/exercise');
 
@@ -30,23 +33,21 @@ class ExerciseTest extends TestCase
         $response->assertJson(['status' => 'success','exercise' => []]);
     }
 
-    /**
-     * @depends test_exercise_creation
-     */
-    public function test_get_exercise(int $id)
+    public function test_get_exercise(): void
     {
-        $response = $this->get('/api/exercise/'.$id);
+        $user = User::factory()->create();
+        $exercise = Exercise::factory()->create(['user_id' => $user->id]);
+        $response = $this->get('/api/exercise/'.$exercise->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success','exercise' => []]);
     }
 
-    /**
-     * @depends test_exercise_creation
-     */
-    public function test_exercise_update(int $id)
+    public function test_exercise_update(): void
     {
-        $response = $this->patch('/api/exercise/'.$id,[
+        $user = User::factory()->create();
+        $exercise = Exercise::factory()->create(['user_id' => $user->id]);
+        $response = $this->patch('/api/exercise/'.$exercise->id,[
             'name' => 'Test update exercise',
             'notes' => 'This is an updated note'
         ]);
@@ -55,12 +56,11 @@ class ExerciseTest extends TestCase
         $response->assertJson(['status' => 'success']);
     }
 
-    /**
-     * @depends test_exercise_creation
-     */
-    public function test_exercise_delete(int $id)
+    public function test_exercise_delete(): void
     {
-        $response = $this->delete('/api/exercise/'.$id);
+        $user = User::factory()->create();
+        $exercise = Exercise::factory()->create(['user_id' => $user->id]);
+        $response = $this->delete('/api/exercise/'.$exercise->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);

@@ -2,14 +2,19 @@
 
 namespace Tests\Feature;
 
+use App\Models\Macro;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class MacroTest extends TestCase
 {
-    public function test_macro_creation(): int
+    use RefreshDatabase;
+    public function test_macro_creation(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->put('/api/macro',[
             'name' => 'Test of macro',
             'description' => 'Testing macro'
@@ -17,11 +22,9 @@ class MacroTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);
-        $findId = json_decode($response->getContent());
-        return $findId->id;
     }
 
-    public function test_get_all_macro()
+    public function test_get_all_macro(): void
     {
         $response = $this->get('/api/macro');
 
@@ -29,23 +32,21 @@ class MacroTest extends TestCase
         $response->assertJson(['status' => 'success','macro' => []]);
     }
 
-    /**
-     * @depends test_macro_creation
-     */
-    public function test_get_macro(int $id)
+    public function test_get_macro(): void
     {
-        $response = $this->get('/api/macro/'.$id);
+        $user = User::factory()->create();
+        $macro = Macro::factory()->create(['user_id' => $user->id]);
+        $response = $this->get('/api/macro/'.$macro->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success','macro' => []]);
     }
 
-    /**
-     * @depends test_macro_creation
-     */
-    public function test_macro_update(int $id)
+    public function test_macro_update(): void
     {
-        $response = $this->patch('/api/macro/'.$id,[
+        $user = User::factory()->create();
+        $macro = Macro::factory()->create(['user_id' => $user->id]);
+        $response = $this->patch('/api/macro/'.$macro->id,[
             'name' => 'Test update macro',
             'description' => 'This is an updated description'
         ]);
@@ -55,12 +56,11 @@ class MacroTest extends TestCase
     }
 
 
-    /**
-     * @depends test_macro_creation
-     */
-    public function test_macro_delete(int $id)
+    public function test_macro_delete(): void
     {
-        $response = $this->delete('/api/macro/'.$id);
+        $user = User::factory()->create();
+        $macro = Macro::factory()->create(['user_id' => $user->id]);
+        $response = $this->delete('/api/macro/'.$macro->id);
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);

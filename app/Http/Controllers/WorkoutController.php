@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Workout;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WorkoutController extends Controller
 {
@@ -26,7 +27,6 @@ class WorkoutController extends Controller
             'start_at' => 'date',
             'end_at' => 'nullable|date',
             'notes' => 'string|max:255',
-            'created_by' => 'required|integer',
         ]);
         $workout = new Workout;
         $workout->name = $request->name;
@@ -34,7 +34,7 @@ class WorkoutController extends Controller
         $workout->type = $request->type;
         $workout->start_at = $request->start_at;
         $workout->end_at = $request->end_at;
-        $workout->created_by = $request->created_by;
+        $workout->user_id = Auth::id();
         $workout->notes = $request->notes;
         if($workout->save()) return response()->json(['status' => 'success','id' => $workout->id]);
         return response()->json(['status' => 'error', 'report' => 'Non è stato possibile inserire il workout']);

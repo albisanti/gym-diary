@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Macro;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class MacroController extends Controller
 {
@@ -25,6 +26,7 @@ class MacroController extends Controller
         $macro = new Macro;
         $macro->name = $request->name;
         $macro->description = $request->description;
+        $macro->user_id = Auth::id();
         if($macro->save()) return response()->json(['status' => 'success','id' => $macro->id]);
         return response()->json(['status' => 'error', 'report' => 'Non è stato possibile inserire la macro']);
     }
