@@ -27,6 +27,7 @@ class ExerciseTest extends TestCase
 
     public function test_get_all_exercise(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->get('/api/exercise');
 
         $response->assertStatus(200);
@@ -36,6 +37,7 @@ class ExerciseTest extends TestCase
     public function test_get_exercise(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $exercise = Exercise::factory()->create(['user_id' => $user->id]);
         $response = $this->get('/api/exercise/'.$exercise->id);
 
@@ -46,6 +48,7 @@ class ExerciseTest extends TestCase
     public function test_exercise_update(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $exercise = Exercise::factory()->create(['user_id' => $user->id]);
         $response = $this->patch('/api/exercise/'.$exercise->id,[
             'name' => 'Test update exercise',
@@ -59,6 +62,7 @@ class ExerciseTest extends TestCase
     public function test_exercise_delete(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $exercise = Exercise::factory()->create(['user_id' => $user->id]);
         $response = $this->delete('/api/exercise/'.$exercise->id);
 

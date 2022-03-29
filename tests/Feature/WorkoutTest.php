@@ -33,6 +33,7 @@ class WorkoutTest extends TestCase
 
     public function test_get_all_workout(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->get('/api/workout');
 
         $response->assertStatus(200);
@@ -42,6 +43,7 @@ class WorkoutTest extends TestCase
     public function test_get_workout(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $userAssigner = User::factory()->create();
         $workout = Workout::factory()->create([
             'user_id' => $user->id
@@ -55,6 +57,7 @@ class WorkoutTest extends TestCase
     public function test_workout_update(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $userAssigner = User::factory()->create();
         $workout = Workout::factory()->create([
             'user_id' => $user->id
@@ -72,6 +75,7 @@ class WorkoutTest extends TestCase
     public function test_workout_delete(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $userAssigner = User::factory()->create();
         $workout = Workout::factory()->create([
             'user_id' => $user->id

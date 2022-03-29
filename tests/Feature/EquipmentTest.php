@@ -27,6 +27,7 @@ class EquipmentTest extends TestCase
 
     public function test_get_all_equipment(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->get('/api/equipment');
 
         $response->assertStatus(200);
@@ -36,6 +37,7 @@ class EquipmentTest extends TestCase
     public function test_get_equipment(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $equipment = Equipment::factory()->create(['user_id' => $user->id]);
         $response = $this->get('/api/equipment/'.$equipment->id);
 
@@ -46,6 +48,7 @@ class EquipmentTest extends TestCase
     public function test_equipment_update(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $equipment = Equipment::factory()->create(['user_id' => $user->id]);
         $response = $this->patch('/api/equipment/'.$equipment->id,[
             'name' => 'Test update equipment',
@@ -59,6 +62,7 @@ class EquipmentTest extends TestCase
     public function test_equipment_delete(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $equipment = Equipment::factory()->create(['user_id' => $user->id]);
         $response = $this->delete('/api/equipment/'.$equipment->id);
 
