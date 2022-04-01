@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Feedback;
 use App\Models\Workout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class FeedbackController extends Controller
 {
@@ -15,6 +17,9 @@ class FeedbackController extends Controller
 
         $workout = Workout::find($request->workout_id);
         if($workout){
+            if($request->user()->cannot('view', $workout)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             $exercise = $workout->exercises()->where('exercises.id','=',$request->exercise_id)->first();
             if($exercise){
                 $feedback = new Feedback;
@@ -45,6 +50,9 @@ class FeedbackController extends Controller
     public function GetFeedbackFromWorkoutId(\Illuminate\Http\Request $request){
         $workout = Workout::find($request->workoutId);
         if($workout){
+            if($request->user()->cannot('view', $workout)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             $feedback = $workout->feedback()->get();
             if($feedback){
                 return response()->json(['status' => 'success','feedback' => $feedback]);
@@ -57,6 +65,9 @@ class FeedbackController extends Controller
     public function UpdateFeedback(\Illuminate\Http\Request $request){
         $feedback = Feedback::find($request->id);
         if($feedback) {
+            if(! Gate::allows('edit-feedback', $feedback)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             $feedback->original_series = $request->series ?? $feedback->original_series;
             $feedback->original_repetitions = $request->repetitions ?? $feedback->original_repetitions;
             $feedback->original_weight = $request->weight ?? $feedback->original_weight;
@@ -76,6 +87,9 @@ class FeedbackController extends Controller
     public function RemoveFeedback(\Illuminate\Http\Request $request){
         $feedback = Feedback::find($request->id);
         if($feedback) {
+            if(! Gate::allows('edit-feedback', $feedback)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             $feedback->delete();
             if($feedback->save()) return response()->json(['status' => 'success']);
         }

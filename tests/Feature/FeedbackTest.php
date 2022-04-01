@@ -39,7 +39,14 @@ class FeedbackTest extends TestCase
 
     public function test_get_all_feedback(): void
     {
-        $feedback = Feedback::factory()->create();
+        $userPt = User::factory()->create();
+        Sanctum::actingAs($userPt);
+        $feedback = Feedback::factory()->create([
+            'workout_id' => Workout::factory()->create([
+                'user_id' => $userPt
+            ]),
+            'exercise_id' => Exercise::factory()->create(['user_id' => $userPt])
+        ]);
         $response = $this->get('/api/feedback/'.$feedback->id);
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success', 'feedback' => []]);
@@ -47,7 +54,16 @@ class FeedbackTest extends TestCase
 
     public function test_update_feedback(): void
     {
-        $feedback = Feedback::factory()->create();
+        $userPt = User::factory()->create();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $feedback = Feedback::factory()->create([
+            'workout_id' => Workout::factory()->create([
+                'user_id' => $userPt,
+                'assigned_to' => $user->id
+            ]),
+            'exercise_id' => Exercise::factory()->create(['user_id' => $userPt])
+        ]);
         $response = $this->patch('/api/feedback/'.$feedback->id,[
            'feedback_rating' => 'ok',
            'feedback_notes' => 'Updated notes'
@@ -58,7 +74,16 @@ class FeedbackTest extends TestCase
 
     public function test_delete_feedback(): void
     {
-        $feedback = Feedback::factory()->create();
+        $userPt = User::factory()->create();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $feedback = Feedback::factory()->create([
+            'workout_id' => Workout::factory()->create([
+                'user_id' => $userPt,
+                'assigned_to' => $user->id
+            ]),
+            'exercise_id' => Exercise::factory()->create(['user_id' => $userPt])
+        ]);
         $response = $this->delete('/api/feedback/'.$feedback->id);
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);

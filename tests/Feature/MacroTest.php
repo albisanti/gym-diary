@@ -26,6 +26,7 @@ class MacroTest extends TestCase
 
     public function test_get_all_macro(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->get('/api/macro');
 
         $response->assertStatus(200);
@@ -35,6 +36,7 @@ class MacroTest extends TestCase
     public function test_get_macro(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $macro = Macro::factory()->create(['user_id' => $user->id]);
         $response = $this->get('/api/macro/'.$macro->id);
 
@@ -45,6 +47,7 @@ class MacroTest extends TestCase
     public function test_macro_update(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $macro = Macro::factory()->create(['user_id' => $user->id]);
         $response = $this->patch('/api/macro/'.$macro->id,[
             'name' => 'Test update macro',
@@ -59,6 +62,7 @@ class MacroTest extends TestCase
     public function test_macro_delete(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $macro = Macro::factory()->create(['user_id' => $user->id]);
         $response = $this->delete('/api/macro/'.$macro->id);
 

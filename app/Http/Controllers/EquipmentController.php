@@ -10,12 +10,17 @@ class EquipmentController extends Controller
 {
     public function getEquipment(\Illuminate\Http\Request $request): JsonResponse {
         $equipment = Equipment::find($request->id);
-        if($equipment) return response()->json(['status' => 'success', 'equipment' => $equipment]);
+        if($equipment) {
+            if($request->user()->cannot('view', $equipment)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            return response()->json(['status' => 'success', 'equipment' => $equipment]);
+        }
         return response()->json(['status' => 'error', 'report' => 'Non è stata trovata nessun attrezzo']);
     }
 
     public function getAllEquipments(){
-        return response()->json(['status' => 'success','equipment' => Equipment::all()]);
+        return response()->json(['status' => 'success','equipment' => Equipment::where('user_id', Auth::user()->id)->get()]);
     }
 
     public function createEquipment(\Illuminate\Http\Request $request): JsonResponse {
@@ -40,6 +45,9 @@ class EquipmentController extends Controller
         ]);
         $equipment = Equipment::find($request->id);
         if($equipment){
+            if($request->user()->cannot('update', $equipment)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             $equipment->name = $request->name ?? $equipment->name;
             $equipment->description = $request->description ?? $equipment->description;
             if($equipment->save()) return response()->json(['status' => 'success']);
@@ -51,6 +59,9 @@ class EquipmentController extends Controller
     public function deleteEquipment(\Illuminate\Http\Request $request): JsonResponse {
         $equipment = Equipment::find($request->id);
         if($equipment) {
+            if($request->user()->cannot('delete', $equipment)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             if ($equipment->delete()) return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'error', 'report' => 'Non è stato possibile cancellare l\'attrezzo']);

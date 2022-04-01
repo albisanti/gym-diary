@@ -10,12 +10,17 @@ class MacroController extends Controller
 {
     public function getMacro(\Illuminate\Http\Request $request): JsonResponse {
         $macro = Macro::find($request->id);
-        if($macro) return response()->json(['status' => 'success', 'macro' => $macro]);
+        if($macro) {
+            if($request->user()->cannot('view', $macro)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            return response()->json(['status' => 'success', 'macro' => $macro]);
+        }
         return response()->json(['status' => 'error', 'report' => 'Non è stata trovata nessuna macro']);
     }
 
     public function getAllMacros(){
-        return response()->json(['status' => 'success','macro' => Macro::all()]);
+        return response()->json(['status' => 'success','macro' => Macro::where('user_id', Auth::user()->id)->get()]);
     }
 
     public function createMacro(\Illuminate\Http\Request $request): JsonResponse {
@@ -38,6 +43,9 @@ class MacroController extends Controller
         ]);
         $macro = Macro::find($request->id);
         if($macro){
+            if($request->user()->cannot('update', $macro)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             $macro->name = $request->name ?? $macro->name;
             $macro->description = $request->description ?? $macro->description;
             if($macro->save()) return response()->json(['status' => 'success']);
@@ -49,6 +57,9 @@ class MacroController extends Controller
     public function deleteMacro(\Illuminate\Http\Request $request): JsonResponse {
         $macro = Macro::find($request->id);
         if($macro) {
+            if($request->user()->cannot('delete', $macro)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             if ($macro->delete()) return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'error', 'report' => 'Non è stato possibile cancellare la macro']);

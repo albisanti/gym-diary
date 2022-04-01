@@ -17,7 +17,8 @@ class WorkoutFactory extends Factory
         return [
             'name' => $this->faker->sentence(2),
             'description' => $this->faker->sentence(),
-            'user_id' => User::factory()
+            'user_id' => User::factory(),
+            'assigned_to' => User::factory(),
         ];
     }
 }

@@ -29,7 +29,7 @@ class FeedbackFactory extends Factory
             'actual_repetitions' => $this->faker->numberBetween(6,20),
             'actual_weight' => $this->faker->numberBetween(10,40),
             'feedback_rating' => $this->faker->randomElement(['less','ok','more']),
-            'feedback_notes' => $this->faker->sentence(25),
+            'feedback_notes' => $this->faker->sentence(20),
         ];
     }
 }

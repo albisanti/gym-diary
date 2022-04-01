@@ -10,12 +10,17 @@ class CategoryController extends Controller
 {
     public function getCategory(\Illuminate\Http\Request $request): JsonResponse {
         $category = Category::find($request->id);
-        if($category) return response()->json(['status' => 'success', 'category' => $category]);
+        if($category) {
+            if($request->user()->cannot('view', $category)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            return response()->json(['status' => 'success', 'category' => $category]);
+        }
         return response()->json(['status' => 'error', 'report' => 'Non è stata trovata nessuna categoria']);
     }
 
     public function getAllCategories(){
-        return response()->json(['status' => 'success','category' => Category::all()]);
+        return response()->json(['status' => 'success','category' => Category::where('user_id', Auth::user()->id)->get()]);
     }
 
     public function createCategory(\Illuminate\Http\Request $request): JsonResponse {
@@ -38,6 +43,11 @@ class CategoryController extends Controller
         ]);
         $category = Category::find($request->id);
         if($category){
+
+            if($request->user()->cannot('update', $category)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
             $category->name = $request->name ?? $category->name;
             $category->description = $request->description ?? $category->description;
             if($category->save()) return response()->json(['status' => 'success']);
@@ -49,6 +59,9 @@ class CategoryController extends Controller
     public function deleteCategory(\Illuminate\Http\Request $request): JsonResponse {
         $category = Category::find($request->id);
         if($category) {
+            if($request->user()->cannot('delete', $category)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             if ($category->delete()) return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'error', 'report' => 'Non è stato possibile cancellare la categoria']);
