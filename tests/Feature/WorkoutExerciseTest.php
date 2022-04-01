@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Exercise;
 use App\Models\User;
 use App\Models\Workout;
+use App\Models\WorkoutExercise;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
@@ -36,10 +37,14 @@ class WorkoutExerciseTest extends TestCase
 
     public function test_retrieve_workouts_exercises()
     {
+
         $workout = Workout::factory()->create();
+        WorkoutExercise::factory()->create([
+            'workout_id' => $workout->id,
+        ]);
         $response = $this->get('/api/workout/exercises/'.$workout->id);
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'success','exercises' => []]);
+        $response->assertJson(['status' => 'success','exercises' => [], 'workout' => []]);
     }
 
     public function test_update_exercise_for_workout()

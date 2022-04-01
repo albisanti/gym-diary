@@ -24,7 +24,8 @@ class WorkoutTest extends TestCase
             'type' => 'TestType',
             'notes' => 'This is a note',
             'start_at' => date('Y-m-d'),
-            'end_at' => null
+            'end_at' => null,
+            'assigned_to' => $userAssigner->id,
         ]);
 
         $response->assertStatus(200);
