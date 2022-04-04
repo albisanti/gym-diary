@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('edit-feedback', function ($user, $feedback) {
-            return $user->id === $feedback->workout()->first()->assigned_to;
+            return $user->id === (int)$feedback->workout()->first()->assigned_to;
         });
     }
 }

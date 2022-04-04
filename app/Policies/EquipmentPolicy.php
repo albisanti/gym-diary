@@ -30,7 +30,7 @@ class EquipmentPolicy
      */
     public function view(User $user, Equipment $equipment)
     {
-        return $user->id === $equipment->user_id;
+        return $user->id === (int)$equipment->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class EquipmentPolicy
      */
     public function update(User $user, Equipment $equipment)
     {
-        return $user->id === $equipment->user_id;
+        return $user->id === (int)$equipment->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class EquipmentPolicy
      */
     public function delete(User $user, Equipment $equipment)
     {
-        return $user->id === $equipment->user_id;
+        return $user->id === (int)$equipment->user_id;
     }
 
     /**

@@ -30,7 +30,7 @@ class MacroPolicy
      */
     public function view(User $user, Macro $macro)
     {
-        return $user->id === $macro->user_id;
+        return $user->id === (int)$macro->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class MacroPolicy
      */
     public function update(User $user, Macro $macro)
     {
-        return $user->id === $macro->user_id;
+        return $user->id === (int)$macro->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class MacroPolicy
      */
     public function delete(User $user, Macro $macro)
     {
-        return $user->id === $macro->user_id;
+        return $user->id === (int)$macro->user_id;
     }
 
     /**

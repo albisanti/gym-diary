@@ -31,7 +31,7 @@ class WorkoutPolicy
      */
     public function view(User $user, Workout $workout)
     {
-        return $user->id === $workout->user_id || $user->id === $workout->assigned_to;
+        return $user->id === (int)$workout->user_id || $user->id === (int)$workout->assigned_to;
     }
 
     /**
@@ -54,7 +54,7 @@ class WorkoutPolicy
      */
     public function update(User $user, Workout $workout)
     {
-        return $user->id === $workout->user_id;
+        return $user->id === (int)$workout->user_id;
     }
 
     /**
@@ -66,7 +66,7 @@ class WorkoutPolicy
      */
     public function delete(User $user, Workout $workout)
     {
-        return $user->id === $workout->user_id;
+        return $user->id === (int)$workout->user_id;
     }
 
     /**
@@ -102,6 +102,6 @@ class WorkoutPolicy
      */
     public function addExercise(User $user, Workout $workout, Exercise $exercise)
     {
-        return $user->id === $workout->user_id;
+        return $user->id === (int)$workout->user_id;
     }
 }
