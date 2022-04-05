@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserCustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
@@ -73,6 +74,16 @@ Route::put('/feedback',[FeedbackController::class,'AddNewFeedback']);
 Route::patch('/feedback/{id}',[FeedbackController::class,'UpdateFeedback']);
 Route::delete('/feedback/{id}',[FeedbackController::class,'RemoveFeedback']);
 
+//Customers related routes
+Route::prefix('/customer')->group(function () {
+    Route::put('/add',[UserCustomerController::class,'AddNewCustomer'])->middleware(['auth:sanctum']);
+    Route::patch('/{accepted}',[UserCustomerController::class,'AcceptOrRefuseInvitation'])->where('accepted','accepted|refused');
+    Route::delete('/remove',[UserCustomerController::class,'DeleteCustomer'])->whereNumber('id')->middleware(['auth:sanctum']);
+    Route::patch('/finalize-user',[UserCustomerController::class,'FinalizeUserCreation']);
+    Route::get('/',[UserCustomerController::class,'GetCustomers'])->middleware(['auth:sanctum']);
+});
+
+//User related routes
 Route::get('/email/verify/{id}/{hash}',[UserController::class,'VerifyEmail'])->middleware(['auth:sanctum','signed:sanctum'])->name('verification.verify');
 Route::post('/email/verification-notification',[UserController::class,'ResendVerificationNotification'])->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
 Route::post('/forgot-password',[UserController::class,'SendPasswordReset'])->middleware('guest')->name('password.email');
