@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\UserCustomer;
 use App\Models\Workout;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,8 +17,13 @@ class WorkoutTest extends TestCase
     use RefreshDatabase;
     public function test_workout_creation(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $userAssigner = User::factory()->create();
+        UserCustomer::factory()->create([
+            'user_id' => $user->id,
+            'customer_id' => $userAssigner->id,
+        ]);
         $response = $this->put('/api/workout',[
             'name' => 'Test of workout',
             'description' => 'Testing workout',
