@@ -28,15 +28,18 @@ class StoreUserAfterInvitationRequest extends FormRequest
 
     public function fullfill(){
         $user = User::find($this->customer_id);
-        $user->name = $this->name;
-        $user->password = Hash::make($this->password);
-        $user->email_verified_at = now();
-        if($user->save()){
-            $userPt = User::find($this->user->user_id);
-            event(new InvitationAccepted($userPt,$user));
-            return true;
+        if(!empty($user->name)) {
+            $user->name = $this->name;
+            $user->password = Hash::make($this->password);
+            $user->email_verified_at = now();
+            if ($user->save()) {
+                $userPt = User::find($this->user->user_id);
+                event(new InvitationAccepted($userPt, $user));
+                return true;
+            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
