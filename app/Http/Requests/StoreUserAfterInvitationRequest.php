@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Events\InvitationAccepted;
 use App\Models\User;
 use App\Models\UserCustomer;
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +32,8 @@ class StoreUserAfterInvitationRequest extends FormRequest
         $user->password = Hash::make($this->password);
         $user->email_verified_at = now();
         if($user->save()){
-            //TODO: dispatch event for notify the user that the invitation has been accepted
+            $userPt = User::find($this->user->user_id);
+            event(new InvitationAccepted($userPt,$user));
             return true;
         }
         return false;
