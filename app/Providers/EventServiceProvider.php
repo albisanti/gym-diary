@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\InvitationAccepted;
+use App\Events\UserInvited;
+use App\Listeners\NotifyAcceptedInvitation;
+use App\Listeners\SendUserInvitation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -19,6 +23,12 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        UserInvited::class => [
+            SendUserInvitation::class
+        ],
+        InvitationAccepted::class => [
+            NotifyAcceptedInvitation::class
         ],
     ];
 

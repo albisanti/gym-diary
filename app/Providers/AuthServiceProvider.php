@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\UserCustomer;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -29,5 +30,11 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('edit-feedback', function ($user, $feedback) {
             return $user->id === (int)$feedback->workout()->first()->assigned_to;
         });
+
+        Gate::define('assign-workout', function ($user, $assignee) {
+            $customer = UserCustomer::where('user_id', $user->id)->where('customer_id', $assignee)->first();
+            return !empty($customer);
+        });
+
     }
 }

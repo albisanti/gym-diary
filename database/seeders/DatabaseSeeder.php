@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\UserCustomer;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,9 +15,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \DB::table('users')->insert([
+            'id' => 1,
             'name' => 'Alberto',
             'email' => 'test@test.com',
-            'password' => \Hash::make('test123')
+            'password' => \Hash::make('test123'),
+            'email_verified_at' => now(),
         ]);
         \DB::table('workouts')->insert([
             'name' => 'Test day1',
@@ -38,6 +41,9 @@ class DatabaseSeeder extends Seeder
             'exercise_id' => 2,
             'series' => 5,
             'repetitions' => 5
+        ]);
+        UserCustomer::factory()->count(10)->create([
+            'user_id' => 1
         ]);
     }
 }
