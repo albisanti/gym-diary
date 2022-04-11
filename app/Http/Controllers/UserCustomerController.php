@@ -79,7 +79,7 @@ class UserCustomerController extends Controller
     }
 
     public function GetCustomers(Request $request){
-        $customers = UserCustomer::where('user_id',Auth::id())->get();
+        $customers = User::find(Auth::id())->customers()->get();
         if($customers){
             return response()->json($customers);
         }

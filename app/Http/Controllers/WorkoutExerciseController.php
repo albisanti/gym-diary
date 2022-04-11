@@ -37,7 +37,10 @@ class WorkoutExerciseController extends Controller
     public function GetWorkoutsExercises(\Illuminate\Http\Request $request){
         $workout = Workout::find($request->id);
         if($workout){
-            return response()->json(['status' => 'success','exercises' => $workout->exercises()->get(), 'workout' => $workout]);
+            if($request->user()->can('view', $workout)){
+                return response()->json(['status' => 'success','exercises' => $workout->exercises()->get(), 'workout' => $workout]);
+            }
+            return response()->json(['status' => 'error','report' => "L'utente non ha i permessi per visualizzare il workout"], 401);
         }
         return response()->json(['status' => 'error','report' => 'Non è trovato nessun esercizio']);
     }

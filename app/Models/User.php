@@ -44,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     ];
 
     public function customers() {
-        return $this->belongsToMany(User::class)->using(UserCustomer::class);
+        return $this->belongsToMany(User::class,'user_customer','id','customer_id')->using(UserCustomer::class);
     }
 
 }

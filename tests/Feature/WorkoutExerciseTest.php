@@ -37,8 +37,11 @@ class WorkoutExerciseTest extends TestCase
 
     public function test_retrieve_workouts_exercises()
     {
-
-        $workout = Workout::factory()->create();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $workout = Workout::factory()->create([
+            'user_id' => $user->id,
+        ]);
         WorkoutExercise::factory()->create([
             'workout_id' => $workout->id,
         ]);
